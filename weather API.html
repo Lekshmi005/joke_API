@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Public API Fetcher - Comedy Style</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+* {
+    box-sizing: border-box;
+    font-family: "Segoe UI", Tahoma, sans-serif;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+
+    /* ✅ BACKGROUND IMAGE */
+    background-image: url("laughing-emoji-bg.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/* Card stays readable */
+.card {
+    width: 100%;
+    max-width: 900px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 16px;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.25);
+    padding: 32px;
+}
+
+/* Headers */
+h1 {
+    margin: 0;
+    font-size: 28px;
+}
+
+.subtitle {
+    color: #666;
+    margin-top: 4px;
+}
+
+.status {
+    margin-top: 12px;
+    font-size: 14px;
+}
+
+/* Display */
+.display-area {
+    margin-top: 24px;
+    background: #f6f8fa;
+    border-radius: 12px;
+    padding: 20px;
+    font-family: Consolas, monospace;
+}
+
+.row {
+    display: flex;
+    gap: 20px;
+}
+
+.label {
+    width: 120px;
+    font-weight: bold;
+}
+
+.hidden {
+    color: #999;
+    font-style: italic;
+}
+
+/* Button */
+.button-container {
+    margin-top: 28px;
+    text-align: center;
+}
+
+button {
+    background: #f26a4f;
+    border: none;
+    padding: 14px 30px;
+    border-radius: 999px;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+/* Footer */
+.footer {
+    margin-top: 20px;
+    font-size: 13px;
+    color: #666;
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+    <h1>Public API Fetcher</h1>
+    <div class="subtitle">Restive API Fetcher – Comedy Style</div>
+    <div class="status">🔄 Retrieving data from Official Joke API</div>
+
+    <div class="display-area">
+        <div class="row">
+            <div class="label">setup</div>
+            <div id="setupText">Click the button to fetch a joke!</div>
+        </div>
+
+        <div class="row" style="margin-top:10px;">
+            <div class="label">#punchline:</div>
+            <div id="punchlineText" class="hidden">( punchline.hidden )</div>
+        </div>
+    </div>
+
+    <div class="button-container">
+        <button id="jokeBtn">Get Random Joke</button>
+    </div>
+
+    <div class="footer">
+        fetch() → JSON → async random joke
+    </div>
+</div>
+
+<script>
+const btn = document.getElementById("jokeBtn");
+const setup = document.getElementById("setupText");
+const punch = document.getElementById("punchlineText");
+
+btn.addEventListener("click", async () => {
+    btn.disabled = true;
+    setup.textContent = "Fetching joke...";
+    punch.textContent = "( punchline.hidden )";
+    punch.classList.add("hidden");
+
+    try {
+        const res = await fetch("https://official-joke-api.appspot.com/random_joke");
+        const data = await res.json();
+        setup.textContent = data.setup;
+        punch.textContent = data.punchline;
+        punch.classList.remove("hidden");
+    } catch {
+        setup.textContent = "Failed to fetch joke.";
+    } finally {
+        btn.disabled = false;
+    }
+});
+</script>
+
+</body>
+</html>
